@@ -2,6 +2,7 @@
 #define LR5D_MATRIX_H
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <stdbool.h>
 #include <malloc.h>
 #include <memory.h>
@@ -25,7 +26,21 @@ void freeMemMatrix(matrix *m);
 
 void freeMemMatrices(matrix *ms, int nMatrices);
 
+void inputMatrix(matrix *m);
+
+void inputMatrices(matrix ms[], int nMatrices);
+
+void outputMatrix(matrix m);
+
+void outputMatrices(matrix ms[], int nMatrices);
+
 void swap(void *a, void *b, size_t baseTypeSize);
+
+void swapRows(matrix *m, int i1, int i2);
+
+void swapColumns(matrix *m, int j1, int j2);
+
+
 
 #include "matrix.c"
 #endif

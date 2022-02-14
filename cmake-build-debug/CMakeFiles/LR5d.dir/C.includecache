@@ -13,6 +13,8 @@ C:/Users/ASUS TUF GAMING/CLionProjects/LR5d/libs/data_structures/matrix/matrix.h
 C:/Users/ASUS TUF GAMING/CLionProjects/LR5d/libs/data_structures/matrix/matrix.h
 stdlib.h
 -
+stdio.h
+-
 stdbool.h
 -
 malloc.h
