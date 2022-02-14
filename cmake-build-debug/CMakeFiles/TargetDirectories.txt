@@ -1,0 +1,8 @@
+C:/Users/ASUS TUF GAMING/CLionProjects/LR5d/cmake-build-debug/CMakeFiles/LR5d.dir
+C:/Users/ASUS TUF GAMING/CLionProjects/LR5d/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/ASUS TUF GAMING/CLionProjects/LR5d/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+C:/Users/ASUS TUF GAMING/CLionProjects/LR5d/cmake-build-debug/libs/CMakeFiles/edit_cache.dir
+C:/Users/ASUS TUF GAMING/CLionProjects/LR5d/cmake-build-debug/libs/CMakeFiles/rebuild_cache.dir
+C:/Users/ASUS TUF GAMING/CLionProjects/LR5d/cmake-build-debug/libs/data_structures/CMakeFiles/data_structures.dir
+C:/Users/ASUS TUF GAMING/CLionProjects/LR5d/cmake-build-debug/libs/data_structures/CMakeFiles/edit_cache.dir
+C:/Users/ASUS TUF GAMING/CLionProjects/LR5d/cmake-build-debug/libs/data_structures/CMakeFiles/rebuild_cache.dir
