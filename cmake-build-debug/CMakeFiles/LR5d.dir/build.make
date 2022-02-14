@@ -66,6 +66,7 @@ include CMakeFiles/LR5d.dir/progress.make
 include CMakeFiles/LR5d.dir/flags.make
 
 CMakeFiles/LR5d.dir/main.c.obj: CMakeFiles/LR5d.dir/flags.make
+CMakeFiles/LR5d.dir/main.c.obj: CMakeFiles/LR5d.dir/includes_C.rsp
 CMakeFiles/LR5d.dir/main.c.obj: ../main.c
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\ASUS TUF GAMING\CLionProjects\LR5d\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/LR5d.dir/main.c.obj"
 	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\LR5d.dir\main.c.obj -c "C:\Users\ASUS TUF GAMING\CLionProjects\LR5d\main.c"

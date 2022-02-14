@@ -66,6 +66,7 @@ include libs/data_structures/CMakeFiles/data_structures.dir/progress.make
 include libs/data_structures/CMakeFiles/data_structures.dir/flags.make
 
 libs/data_structures/CMakeFiles/data_structures.dir/matrix/matrix.c.obj: libs/data_structures/CMakeFiles/data_structures.dir/flags.make
+libs/data_structures/CMakeFiles/data_structures.dir/matrix/matrix.c.obj: libs/data_structures/CMakeFiles/data_structures.dir/includes_C.rsp
 libs/data_structures/CMakeFiles/data_structures.dir/matrix/matrix.c.obj: ../libs/data_structures/matrix/matrix.c
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\ASUS TUF GAMING\CLionProjects\LR5d\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building C object libs/data_structures/CMakeFiles/data_structures.dir/matrix/matrix.c.obj"
 	cd /d C:\Users\ASUSTU~1\CLIONP~1\LR5d\CMAKE-~1\libs\DATA_S~1 && C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\data_structures.dir\matrix\matrix.c.obj -c "C:\Users\ASUS TUF GAMING\CLionProjects\LR5d\libs\data_structures\matrix\matrix.c"

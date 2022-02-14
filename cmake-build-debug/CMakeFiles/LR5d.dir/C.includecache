@@ -6,7 +6,25 @@
 
 #IncludeRegexTransform: 
 
+C:/Users/ASUS TUF GAMING/CLionProjects/LR5d/libs/data_structures/matrix/matrix.c
+matrix.h
+C:/Users/ASUS TUF GAMING/CLionProjects/LR5d/libs/data_structures/matrix/matrix.h
+
+C:/Users/ASUS TUF GAMING/CLionProjects/LR5d/libs/data_structures/matrix/matrix.h
+stdlib.h
+-
+stdbool.h
+-
+malloc.h
+-
+memory.h
+-
+matrix.c
+C:/Users/ASUS TUF GAMING/CLionProjects/LR5d/libs/data_structures/matrix/matrix.c
+
 C:/Users/ASUS TUF GAMING/CLionProjects/LR5d/main.c
 stdio.h
 -
+libs/data_structures/matrix/matrix.h
+C:/Users/ASUS TUF GAMING/CLionProjects/LR5d/libs/data_structures/matrix/matrix.h
 
