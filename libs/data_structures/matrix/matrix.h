@@ -34,13 +34,21 @@ void outputMatrix(matrix m);
 
 void outputMatrices(matrix ms[], int nMatrices);
 
-void swap(void *a, void *b, size_t size);
-
 void swapRows(matrix *m, int i1, int i2);
 
 void swapColumns(matrix *m, int j1, int j2);
 
 void insertionSortRowsMatrixByRowCriteria(matrix *m, int (*criteria)(int *, int));
+
+bool isSquareMatrix(matrix m);
+
+bool twoMatricesEqual(matrix m1, matrix m2);
+
+bool isEMatrix(matrix m);
+
+bool isSymmetricMatrix(matrix m);
+
+void transposeMatrix(matrix *m);
 
 #include "matrix.c"
 #endif
