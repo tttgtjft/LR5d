@@ -146,7 +146,16 @@ void task5(matrix m){
 //------------------------------TASK 6------------------------------//
 
 bool isMutuallyInverseMatrices(matrix m1, matrix m2) {
-    return isEMatrix(mulMatrices(m1, m2));
+    matrix mulMatrix = mulMatrices(m1, m2);
+
+    if (isEMatrix(mulMatrix)){
+        freeMemMatrix(&mulMatrix);
+        return true;
+    }
+    else{
+        freeMemMatrix(&mulMatrix);
+        return false;
+    }
 }
 
 bool task6(matrix m1, matrix m2){
@@ -528,13 +537,13 @@ void test_task4_oneElem() {
 void test_task4_NotSymmetricSquareMatrix() {
     matrix m = createMatrixFromArray((int[]) {7, 1, 2,
                                               1, 8, 1,
-                                              3, 1, 3}, 3, 3);
+                                              3, 3, 3}, 3, 3);
 
     task4(&m);
 
     matrix expectation = createMatrixFromArray((int[]) {7, 1, 2,
                                                         1, 8, 1,
-                                                        3, 1, 3}, 3, 3);
+                                                        3, 3, 3}, 3, 3);
 
     assert(areTwoMatricesEqual(m, expectation));
 
