@@ -98,9 +98,9 @@ void insertionSortMatrixByCriteria(matrix *m, int (criteria)(int [], int), const
         for (int i = 0; i < m->nCols; ++i) {
             int t[m->nRows];
             for (int j = 0; j < m->nRows; ++j)
-                t[i] = m->values[j][i];
+                t[j] = m->values[j][i];
 
-            colsArr[i] = criteria(t, m->nCols);
+            colsArr[i] = criteria(t, m->nRows);
         }
 
         insertionSortMatrix(colsArr, m, swapColumns, m->nCols);
@@ -111,7 +111,7 @@ bool isSquareMatrix(const matrix m){
     return m.nRows == m.nCols;
 }
 
-bool twoMatricesEqual(const matrix m1, const matrix m2){
+bool areTwoMatricesEqual(matrix m1, matrix m2){
     if (m1.nRows != m2.nRows || m1.nCols != m2.nCols)
         return false;
 
@@ -131,7 +131,7 @@ bool isEMatrix(const matrix m){
         if (m.values[i][i] != 1)
             return false;
         for (int j = 0; j < m.nCols; ++j)
-            if (i != j && !m.values[i][j])
+            if (i != j && m.values[i][j])
                 return false;
     }
 
@@ -176,5 +176,53 @@ void transposeMatrix(matrix *m){
     else if (m->nRows > m->nCols)
         m->values = (int **) realloc(m->values, m->nCols * sizeof(int));
 
-    swap(&m->nRows, &m->nCols, sizeof(int));
+    if (!isSquareMatrix(*m))
+        swap(&m->nRows, &m->nCols, sizeof(int));
+}
+
+position getMinValuePos(matrix m){
+    position minIndex = {0, 0};
+    for (int i = 0; i < m.nRows; ++i)
+        for (int j = 0; j < m.nCols; ++j)
+            if (m.values[minIndex.rowIndex][minIndex.colIndex] > m.values[i][j]){
+                minIndex.rowIndex = i;
+                minIndex.colIndex = j;
+            }
+
+    return minIndex;
+}
+
+position getMaxValuePos(matrix m){
+    position maxIndex = {0, 0};
+    for (int i = 0; i < m.nRows; ++i)
+        for (int j = 0; j < m.nCols; ++j)
+            if (m.values[maxIndex.rowIndex][maxIndex.colIndex] < m.values[i][j]){
+                maxIndex.rowIndex = i;
+                maxIndex.colIndex = j;
+            }
+
+    return maxIndex;
+}
+
+matrix createMatrixFromArray(const int a[], const int nRows, const int nCols){
+    matrix m = getMemMatrix(nRows, nCols);
+
+    int k = 0;
+    for (int i = 0; i < nRows; ++i)
+        for (int j = 0; j < nCols; ++j)
+            m.values[i][j] = a[k++];
+
+    return m;
+}
+
+matrix *createArrayOfMatrixFromArray(const int *values, const int nMatrices, const int nRows, const int nCols){
+    matrix *ms = getMemArrayOfMatrices(nMatrices, nRows, nCols);
+
+    int l = 0;
+    for (int k = 0; k < nMatrices; ++k)
+        for (int i = 0; i < nRows; ++i)
+            for (int j = 0; j < nCols; ++j)
+                ms[k].values[i][j] = values[l++];
+
+    return ms;
 }

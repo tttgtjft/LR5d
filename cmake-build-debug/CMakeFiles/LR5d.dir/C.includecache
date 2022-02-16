@@ -25,7 +25,7 @@ matrix.c
 C:/Users/ASUS TUF GAMING/CLionProjects/LR5d/libs/data_structures/matrix/matrix.c
 
 C:/Users/ASUS TUF GAMING/CLionProjects/LR5d/main.c
-stdio.h
+assert.h
 -
 libs/data_structures/matrix/matrix.h
 C:/Users/ASUS TUF GAMING/CLionProjects/LR5d/libs/data_structures/matrix/matrix.h

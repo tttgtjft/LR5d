@@ -42,13 +42,21 @@ void insertionSortRowsMatrixByRowCriteria(matrix *m, int (*criteria)(int *, int)
 
 bool isSquareMatrix(matrix m);
 
-bool twoMatricesEqual(matrix m1, matrix m2);
+bool areTwoMatricesEqual(matrix m1, matrix m2);
 
 bool isEMatrix(matrix m);
 
 bool isSymmetricMatrix(matrix m);
 
 void transposeMatrix(matrix *m);
+
+position getMinValuePos(matrix m);
+
+position getMaxValuePos(matrix m);
+
+matrix createMatrixFromArray(const int a[], int nRows, int nCols);
+
+matrix *createArrayOfMatrixFromArray(const int *values, int nMatrices, int nRows, int nCols);
 
 #include "matrix.c"
 #endif
