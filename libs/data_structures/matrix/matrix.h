@@ -38,7 +38,7 @@ void swapRows(matrix *m, int i1, int i2);
 
 void swapColumns(matrix *m, int j1, int j2);
 
-void insertionSortRowsMatrixByRowCriteria(matrix *m, int (*criteria)(int *, int));
+void insertionSortMatrixByCriteria(matrix *m, int (criteria)(int [], int), bool rowsOrCols);
 
 bool isSquareMatrix(matrix m);
 
