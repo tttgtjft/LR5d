@@ -141,14 +141,10 @@ bool isSymmetricMatrix(const matrix m){
     if (!isSquareMatrix(m))
         return false;
 
-    for (int i = 1; i < m.nCols; ++i) {
-        int t[m.nRows];
-        for (int j = i; j < m.nRows; ++j)
-            t[j] = m.values[j][i - 1];
-
-        if (memcmp(m.values[i - 1] + i, t + i, m.nRows - i) != 0)
-            return false;
-    }
+    for (int i = 0; i < m.nRows; ++i)
+        for (int j = i + 1; j < m.nCols; ++j)
+            if (m.values[i][j] != m.values[j][i])
+                return false;
 
     return true;
 }
