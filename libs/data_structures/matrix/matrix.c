@@ -107,6 +107,40 @@ void insertionSortMatrixByCriteria(matrix *m, int (criteria)(int [], int), const
     }
 }
 
+void insertionSortMatrixF(float a[], matrix *m, void (f)(matrix *, int, int), const int rowsOrCols){
+    for (int i = 1; i < rowsOrCols; ++i) {
+        int k = i;
+        while (k > 0 && a[k - 1] >= a[k]){
+            swap(&a[k - 1], &a[k], sizeof(float));
+            f(m, k - 1, k);
+
+            k--;
+        }
+    }
+}
+
+void insertionSortMatrixByCriteriaF(matrix *m, float (criteria)(int [], int), const bool rowsOrCols){
+    if (rowsOrCols == ROWS){
+        float rowsArr[m->nRows];
+        for (int i = 0; i < m->nRows; ++i)
+            rowsArr[i] = criteria(m->values[i], m->nCols);
+
+        insertionSortMatrixF(rowsArr, m, swapRows, m->nRows);
+    }
+    else if (rowsOrCols == COLS){
+        float colsArr[m->nCols];
+        for (int i = 0; i < m->nCols; ++i) {
+            int t[m->nRows];
+            for (int j = 0; j < m->nRows; ++j)
+                t[j] = m->values[j][i];
+
+            colsArr[i] = criteria(t, m->nRows);
+        }
+
+        insertionSortMatrixF(colsArr, m, swapColumns, m->nCols);
+    }
+}
+
 bool isSquareMatrix(const matrix m){
     return m.nRows == m.nCols;
 }
@@ -166,10 +200,13 @@ void transposeMatrix(matrix *m){
             swap(&m->values[i][j], &m->values[j][i], sizeof(int));
 
     if (m->nCols > m->nRows)
-        for (int i = 0; i < m->nRows; ++i)
+        for (int i = 0; i < m->nCols; ++i)
             m->values[i] = (int *) realloc(m->values[i], m->nRows * sizeof(int));
-    else if (m->nRows > m->nCols)
+    else if (m->nRows > m->nCols){
+        for (int i = m->nCols; i < m->nRows; ++i)
+            free(m->values[i]);
         m->values = (int **) realloc(m->values, m->nCols * sizeof(int));
+    }
 
     if (!isSquareMatrix(*m))
         swap(&m->nRows, &m->nCols, sizeof(int));

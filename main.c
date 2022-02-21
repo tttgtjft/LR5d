@@ -1,5 +1,6 @@
 #include <assert.h>
 #include "libs/data_structures/matrix/matrix.h"
+#include <math.h>
 
 #define EXIT_CODE 1
 #define throwExceptionEmptyArray() fprintf(stderr, "empty array"); exit(EXIT_CODE)
@@ -84,9 +85,8 @@ matrix mulMatrices(matrix m1, matrix m2) {
 }
 
 void getSquareOfMatrixIfSymmetric(matrix *m) {
-    if (isSymmetricMatrix(*m)) {
+    if (isSymmetricMatrix(*m))
         *m = mulMatrices(*m, *m);
-    }
 }
 
 void task4(matrix *m){
@@ -147,15 +147,10 @@ void task5(matrix m){
 
 bool isMutuallyInverseMatrices(matrix m1, matrix m2) {
     matrix mulMatrix = mulMatrices(m1, m2);
+    bool isMutuallyInverse = isEMatrix(mulMatrix);
 
-    if (isEMatrix(mulMatrix)){
-        freeMemMatrix(&mulMatrix);
-        return true;
-    }
-    else{
-        freeMemMatrix(&mulMatrix);
-        return false;
-    }
+    free(mulMatrix.values);
+    return isMutuallyInverse;
 }
 
 bool task6(matrix m1, matrix m2){
@@ -164,9 +159,92 @@ bool task6(matrix m1, matrix m2){
 
 //------------------------------TASK 7------------------------------//
 
+long long findSumOfMaxOfPseudoDiagonal(const matrix m, const int countRows, const int countCols, const int n){
+    int maxInDiagonal = m.values[countRows][countCols];
+    for (int i = 0; i < n; ++i)
+        if (maxInDiagonal < m.values[countRows + i][countCols + i])
+            maxInDiagonal = m.values[countRows + i][countCols + i];
+
+    return maxInDiagonal;
+}
+
+long long findSumOfMaxesOfPseudoDiagonal(const matrix m){
+    long long sumOfMaxesOfPseudoDiagonal = 0;
+
+    int k = 1;
+    int countRows = m.nRows;
+    while (--countRows){
+        sumOfMaxesOfPseudoDiagonal += findSumOfMaxOfPseudoDiagonal(m, countRows, 0, k);
+
+        if (k + 1 <= m.nCols)
+            k++;
+    }
+
+    k = 1;
+    int countCols = m.nCols;
+    while (--countCols){
+        sumOfMaxesOfPseudoDiagonal += findSumOfMaxOfPseudoDiagonal(m, 0, countCols, k);
+
+        if (k + 1 <= m.nRows)
+            k++;
+    }
+
+    return sumOfMaxesOfPseudoDiagonal;
+}
+
+long long task7(matrix m){
+    return findSumOfMaxesOfPseudoDiagonal(m);
+}
+
 //------------------------------TASK 8------------------------------//
 
-//------------------------------TESTS------------------------------//
+int getMinInArea(matrix m){ //O(n * m)
+    int maxInArea = m.values[0][0];
+    position minInArea = {0, 0};
+    for (int i = 0; i < m.nCols; ++i)
+        if (maxInArea < m.values[0][i]){
+            maxInArea = m.values[0][i];
+            minInArea.colIndex = i;
+        }
+
+    for (int i = 1; i < m.nRows; ++i)
+        for (int j = 0; j < m.nCols; ++j) {
+            int t = m.values[i][j];
+
+            if (j != 0 && m.values[i][j] > m.values[i - 1][j - 1])
+                m.values[i][j] = m.values[i - 1][j - 1];
+            if (m.values[i][j] > m.values[i - 1][j])
+                m.values[i][j] = m.values[i - 1][j];
+            if (j != m.nCols - 1 && m.values[i][j] > m.values[i - 1][j + 1])
+                m.values[i][j] = m.values[i - 1][j + 1];
+
+            if (maxInArea < t){
+                maxInArea = t;
+                minInArea.rowIndex = i;
+                minInArea.colIndex = j;
+            }
+        }
+
+    return m.values[minInArea.rowIndex][minInArea.colIndex];
+}
+
+//------------------------------TASK 9------------------------------//
+
+//------------------------------TASK 10-----------------------------//
+
+//------------------------------TASK 11-----------------------------//
+
+//------------------------------TASK 12-----------------------------//
+
+//------------------------------TASK 13-----------------------------//
+
+//------------------------------TASK 14-----------------------------//
+
+int task8(matrix m){
+    return getMinInArea(m);
+}
+
+//------------------------------TESTS-------------------------------//
 
 void test_matrix_tasks();
 
@@ -196,6 +274,12 @@ void test_task6_matrix2x2ProduceIsEMatrix();
 void test_task6_matrix3x3ProduceIsEMatrix();
 void test_task6_matrix2x2ProduceIsNotEMatrix();
 void test_task6_matrix3x3ProduceIsNotEMatrix();
+void test_task7_ColsMoreRowsAndRowsMoreCols();
+void test_task7_3x6matrixAnd6x3matrix();
+void test_task8_v1();
+void test_task8_v2();
+void test_task8_v3();
+void test_task8_minIndexInFirstRow();
 
 void test_matrix_functions();
 
@@ -245,6 +329,12 @@ void test_matrix_tasks(){
     test_task6_matrix3x3ProduceIsEMatrix();
     test_task6_matrix2x2ProduceIsNotEMatrix();
     test_task6_matrix3x3ProduceIsNotEMatrix();
+    test_task7_ColsMoreRowsAndRowsMoreCols();
+    test_task7_3x6matrixAnd6x3matrix();
+    test_task8_v1();
+    test_task8_v2();
+    test_task8_v3();
+    test_task8_minIndexInFirstRow();
 }
 
 void test_matrix_functions(){
@@ -669,6 +759,67 @@ void test_task6_matrix3x3ProduceIsNotEMatrix() {
 
     freeMemMatrix(&m1);
     freeMemMatrix(&m2);
+}
+
+void test_task7_ColsMoreRowsAndRowsMoreCols() {
+    matrix m = createMatrixFromArray((int[]) {3, 2, 5, 4,
+                                              1, 3, 6, 3,
+                                              3, 2, 1, 2}, 3, 4);
+
+    assert(task7(m) == 20);
+
+    transposeMatrix(&m);
+
+    assert(task7(m) == 20);
+
+    freeMemMatrix(&m);
+}
+
+void test_task7_3x6matrixAnd6x3matrix() {
+    matrix m = createMatrixFromArray((int[]) {3, 2, 5, 4, 1, 1,
+                                                 1, 3, 6, 3, 1, 1,
+                                                 3, 2, 1, 2, 1, 1}, 3, 6);
+
+    assert(task7(m) == 22);
+
+    transposeMatrix(&m);
+
+    assert(task7(m) == 22);
+
+    freeMemMatrix(&m);
+}
+
+void test_task8_v1() {
+    matrix m = createMatrixFromArray((int []) {10, 7, 5, 6,
+                                               3, 11, 8, 9,
+                                               4, 1, 12, 2}, 3, 4);
+    assert(task8(m) == 5);
+
+    freeMemMatrix(&m);
+}
+void test_task8_v2() {
+    matrix m = createMatrixFromArray((int []) {6, 8, 9, 2,
+                                               7, 12, 3, 4,
+                                               10, 11, 5, 1}, 3, 4);
+    assert(task8(m) == 6);
+
+    freeMemMatrix(&m);
+}
+void test_task8_v3() {
+    matrix m = createMatrixFromArray((int []) {10, 7, 5, 0,
+                                               3, 11, 8, 9,
+                                               4, 1, 12, 2}, 3, 4);
+    assert(task8(m) == 0);
+
+    freeMemMatrix(&m);
+}
+void test_task8_minIndexInFirstRow() {
+    matrix m = createMatrixFromArray((int []) {8, 30, 9, 2,
+                                               7, 12, 3, 4,
+                                               10, 11, 5, 1}, 3, 4);
+    assert(task8(m) == 30);
+
+    freeMemMatrix(&m);
 }
 
 //-----------------------TESTS FUNCTIONS---------------------------//

@@ -40,6 +40,8 @@ void swapColumns(matrix *m, int j1, int j2);
 
 void insertionSortMatrixByCriteria(matrix *m, int (criteria)(int [], int), bool rowsOrCols);
 
+void insertionSortMatrixByCriteriaF(matrix *m, float (criteria)(int [], int), bool rowsOrCols);
+
 bool isSquareMatrix(matrix m);
 
 bool areTwoMatricesEqual(matrix m1, matrix m2);
