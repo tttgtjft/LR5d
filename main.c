@@ -159,7 +159,7 @@ bool task6(matrix m1, matrix m2){
 
 //------------------------------TASK 7------------------------------//
 
-long long findSumOfMaxOfPseudoDiagonal(const matrix m, const int countRows, const int countCols, const int n){
+long long findMaxOfPseudoDiagonal(const matrix m, const int countRows, const int countCols, const int n){
     int maxInDiagonal = m.values[countRows][countCols];
     for (int i = 0; i < n; ++i)
         if (maxInDiagonal < m.values[countRows + i][countCols + i])
@@ -174,7 +174,7 @@ long long findSumOfMaxesOfPseudoDiagonal(const matrix m){
     int k = 1;
     int countRows = m.nRows;
     while (--countRows){
-        sumOfMaxesOfPseudoDiagonal += findSumOfMaxOfPseudoDiagonal(m, countRows, 0, k);
+        sumOfMaxesOfPseudoDiagonal += findMaxOfPseudoDiagonal(m, countRows, 0, k);
 
         if (k + 1 <= m.nCols)
             k++;
@@ -183,7 +183,7 @@ long long findSumOfMaxesOfPseudoDiagonal(const matrix m){
     k = 1;
     int countCols = m.nCols;
     while (--countCols){
-        sumOfMaxesOfPseudoDiagonal += findSumOfMaxOfPseudoDiagonal(m, 0, countCols, k);
+        sumOfMaxesOfPseudoDiagonal += findMaxOfPseudoDiagonal(m, 0, countCols, k);
 
         if (k + 1 <= m.nRows)
             k++;
@@ -200,11 +200,11 @@ long long task7(matrix m){
 
 int getMinInArea(matrix m){ //O(n * m)
     int maxInArea = m.values[0][0];
-    position minInArea = {0, 0};
+    position posMinInArea = {0, 0};
     for (int i = 0; i < m.nCols; ++i)
         if (maxInArea < m.values[0][i]){
             maxInArea = m.values[0][i];
-            minInArea.colIndex = i;
+            posMinInArea.colIndex = i;
         }
 
     for (int i = 1; i < m.nRows; ++i)
@@ -220,12 +220,16 @@ int getMinInArea(matrix m){ //O(n * m)
 
             if (maxInArea < t){
                 maxInArea = t;
-                minInArea.rowIndex = i;
-                minInArea.colIndex = j;
+                posMinInArea.rowIndex = i;
+                posMinInArea.colIndex = j;
             }
         }
 
-    return m.values[minInArea.rowIndex][minInArea.colIndex];
+    return m.values[posMinInArea.rowIndex][posMinInArea.colIndex];
+}
+
+int task8(matrix m){
+    return getMinInArea(m);
 }
 
 //------------------------------TASK 9------------------------------//
@@ -249,17 +253,68 @@ void task9(matrix m){
 
 //------------------------------TASK 10-----------------------------//
 
+int compare_long_long(const void *a, const void *b) {
+    long long arg1 = *(const long long *)a;
+    long long arg2 = *(const long long *)b;
+    if (arg1 < arg2) return -1;
+    if (arg1 > arg2) return 1;
+    return 0;
+}
+
+int countNUnique(const long long *a, const int n){
+    int countNUnique = 0;
+    int i = -1;
+    while (++i < n - 1){
+        if (a[i] == a[i + 1]){
+            countNUnique++;
+            while (i < n - 1 && a[i] == a[i + 1])
+                i++;
+        }
+    }
+
+    return countNUnique;
+}
+
+int countEqClassesByRowsSum(matrix m){
+    long long rowsSumArr[m.nRows];
+    for (int i = 0; i < m.nRows; ++i)
+        rowsSumArr[i] = getSum(m.values[i], m.nCols);
+
+    qsort(rowsSumArr, m.nRows, sizeof(long long), compare_long_long);
+
+    return countNUnique(rowsSumArr, m.nRows);
+}
+
+int task10(matrix m){
+    return countEqClassesByRowsSum(m);
+}
+
 //------------------------------TASK 11-----------------------------//
 
+int getNSpecialElement(matrix m){
+    transposeMatrix(&m);
+    int counterNSpecialElement = 0;
+    for (int i = 0; i < m.nRows; ++i) {
+        int maxInRow = getMax(m.values[i], m.nCols);
+        if (getSum(m.values[i], m.nCols) - maxInRow < maxInRow)
+            counterNSpecialElement++;
+    }
+
+    return counterNSpecialElement;
+}
+
+int task11(matrix m){
+    return getNSpecialElement(m);
+}
+
 //------------------------------TASK 12-----------------------------//
+
+
 
 //------------------------------TASK 13-----------------------------//
 
 //------------------------------TASK 14-----------------------------//
 
-int task8(matrix m){
-    return getMinInArea(m);
-}
 
 //------------------------------TESTS-------------------------------//
 
@@ -300,6 +355,9 @@ void test_task8_minIndexInFirstRow();
 void test_task9_v1();
 void test_task9_v2();
 void test_task9_oneElement();
+void test_task10_v1();
+void test_task10_v2();
+void test_task11_v1();
 
 void test_matrix_functions();
 
@@ -358,6 +416,9 @@ void test_matrix_tasks(){
     test_task9_v1();
     test_task9_v2();
     test_task9_oneElement();
+    test_task10_v1();
+    test_task10_v2();
+    test_task11_v1();
 }
 
 void test_matrix_functions(){
@@ -885,6 +946,39 @@ void test_task9_oneElement() {
 
     freeMemMatrix(&m1);
     freeMemMatrix(&m2);
+}
+
+void test_task10_v1() {
+    matrix m = createMatrixFromArray((int []) {7, 1,
+                                               2, 7,
+                                               5, 4,
+                                               4, 3,
+                                               1, 6,
+                                               8, 0,
+                                               4, 4}, 7, 2);
+    assert(task10(m) == 3);
+
+    freeMemMatrix(&m);
+}
+
+void test_task10_v2() {
+    matrix m = createMatrixFromArray((int []) {0,
+                                               0,
+                                               0,
+                                               1,
+                                               3,
+                                               10,
+                                               10}, 7, 1);
+    assert(task10(m) == 2);
+
+    freeMemMatrix(&m);
+}
+
+void test_task11_v1() {
+    matrix m = createMatrixFromArray((int []) {3, 5, 5, 4,
+                                               2, 3, 6, 7,
+                                               12, 2, 1, 2}, 3, 4);
+    assert(task11(m) == 2);
 }
 
 //-----------------------TESTS FUNCTIONS---------------------------//

@@ -204,7 +204,7 @@ void transposeMatrix(matrix *m){
     else if (m->nRows > m->nCols){
         for (int i = m->nCols; i < m->nRows; ++i)
             free(m->values[i]);
-        m->values = (int **) realloc(m->values, m->nCols * sizeof(int));
+        m->values = (int **) realloc(m->values, m->nCols * sizeof(int *));
     }
 
     if (!isSquareMatrix(*m))
