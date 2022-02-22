@@ -90,7 +90,6 @@ void insertionSortMatrixByCriteria(matrix *m, int (criteria)(int [], int), const
         int rowsArr[m->nRows];
         for (int i = 0; i < m->nRows; ++i)
             rowsArr[i] = criteria(m->values[i], m->nCols);
-
         insertionSortMatrix(rowsArr, m, swapRows, m->nRows);
     }
     else if (rowsOrCols == COLS){
@@ -107,11 +106,11 @@ void insertionSortMatrixByCriteria(matrix *m, int (criteria)(int [], int), const
     }
 }
 
-void insertionSortMatrixF(float a[], matrix *m, void (f)(matrix *, int, int), const int rowsOrCols){
+void insertionSortMatrixF(double a[], matrix *m, void (f)(matrix *, int, int), const int rowsOrCols){
     for (int i = 1; i < rowsOrCols; ++i) {
         int k = i;
         while (k > 0 && a[k - 1] >= a[k]){
-            swap(&a[k - 1], &a[k], sizeof(float));
+            swap(&a[k - 1], &a[k], sizeof(double));
             f(m, k - 1, k);
 
             k--;
@@ -119,16 +118,16 @@ void insertionSortMatrixF(float a[], matrix *m, void (f)(matrix *, int, int), co
     }
 }
 
-void insertionSortMatrixByCriteriaF(matrix *m, float (criteria)(int [], int), const bool rowsOrCols){
+void insertionSortMatrixByCriteriaF(matrix *m, double (criteria)(int [], int), const bool rowsOrCols){
     if (rowsOrCols == ROWS){
-        float rowsArr[m->nRows];
+        double rowsArr[m->nRows];
         for (int i = 0; i < m->nRows; ++i)
             rowsArr[i] = criteria(m->values[i], m->nCols);
 
         insertionSortMatrixF(rowsArr, m, swapRows, m->nRows);
     }
     else if (rowsOrCols == COLS){
-        float colsArr[m->nCols];
+        double colsArr[m->nCols];
         for (int i = 0; i < m->nCols; ++i) {
             int t[m->nRows];
             for (int j = 0; j < m->nRows; ++j)

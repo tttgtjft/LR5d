@@ -230,6 +230,23 @@ int getMinInArea(matrix m){ //O(n * m)
 
 //------------------------------TASK 9------------------------------//
 
+double getDistance(int a[], int n){
+    double d = 0;
+    for (int i = 0; i < n; ++i)
+        d += pow((double)a[i], 2);
+
+    return sqrt(d);
+}
+
+void sortByDistances(matrix m){
+    for (int i = 0; i < m.nRows; ++i)
+        insertionSortMatrixByCriteriaF(&m, getDistance, ROWS);
+}
+
+void task9(matrix m){
+    sortByDistances(m);
+}
+
 //------------------------------TASK 10-----------------------------//
 
 //------------------------------TASK 11-----------------------------//
@@ -280,6 +297,9 @@ void test_task8_v1();
 void test_task8_v2();
 void test_task8_v3();
 void test_task8_minIndexInFirstRow();
+void test_task9_v1();
+void test_task9_v2();
+void test_task9_oneElement();
 
 void test_matrix_functions();
 
@@ -335,6 +355,9 @@ void test_matrix_tasks(){
     test_task8_v2();
     test_task8_v3();
     test_task8_minIndexInFirstRow();
+    test_task9_v1();
+    test_task9_v2();
+    test_task9_oneElement();
 }
 
 void test_matrix_functions(){
@@ -820,6 +843,48 @@ void test_task8_minIndexInFirstRow() {
     assert(task8(m) == 30);
 
     freeMemMatrix(&m);
+}
+
+void test_task9_v1() {
+    matrix m1 = createMatrixFromArray((int []) {4, 4, 4,
+                                                0, 0, 0,
+                                                1, 2, 3}, 3, 3);
+    matrix m2 = createMatrixFromArray((int []) {0, 0, 0,
+                                                1, 2, 3,
+                                                4, 4, 4}, 3, 3);
+    task9(m1);
+
+    assert(areTwoMatricesEqual(m1, m2));
+
+    freeMemMatrix(&m1);
+    freeMemMatrix(&m2);
+}
+
+void test_task9_v2() {
+    matrix m1 = createMatrixFromArray((int []) {4, 4, 4, 10, 19, 20,
+                                                0, 0, 0, 10, 19, 20,
+                                                1, 2, 3, 10, 19, 20}, 3, 6);
+    matrix m2 = createMatrixFromArray((int []) {0, 0, 0, 10, 19, 20,
+                                                1, 2, 3, 10, 19, 20,
+                                                4, 4, 4, 10, 19, 20}, 3, 6);
+    task9(m1);
+
+    assert(areTwoMatricesEqual(m1, m2));
+
+    freeMemMatrix(&m1);
+    freeMemMatrix(&m2);
+}
+
+void test_task9_oneElement() {
+    matrix m1 = createMatrixFromArray((int []) {4}, 1, 1);
+    matrix m2 = createMatrixFromArray((int []) {4}, 1, 1);
+
+    task9(m1);
+
+    assert(areTwoMatricesEqual(m1, m2));
+
+    freeMemMatrix(&m1);
+    freeMemMatrix(&m2);
 }
 
 //-----------------------TESTS FUNCTIONS---------------------------//
