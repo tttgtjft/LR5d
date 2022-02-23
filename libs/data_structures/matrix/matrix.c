@@ -50,7 +50,7 @@ void outputMatrix(const matrix m){
     }
 }
 
-void outputMatrices(matrix ms[], const int nMatrices){
+void outputMatrices(matrix ms[], const size_t nMatrices){
     for (int i = 0; i < nMatrices; ++i)
         outputMatrix(ms[i]);
 }
@@ -228,6 +228,18 @@ position getMaxValuePos(matrix m){
     for (int i = 0; i < m.nRows; ++i)
         for (int j = 0; j < m.nCols; ++j)
             if (m.values[maxIndex.rowIndex][maxIndex.colIndex] < m.values[i][j]){
+                maxIndex.rowIndex = i;
+                maxIndex.colIndex = j;
+            }
+
+    return maxIndex;
+}
+
+position getMaxAbsValuePos(matrix m){
+    position maxIndex = {0, 0};
+    for (int i = 0; i < m.nRows; ++i)
+        for (int j = 0; j < m.nCols; ++j)
+            if (abs(m.values[maxIndex.rowIndex][maxIndex.colIndex]) < abs(m.values[i][j])){
                 maxIndex.rowIndex = i;
                 maxIndex.colIndex = j;
             }

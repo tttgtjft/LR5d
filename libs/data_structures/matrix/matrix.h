@@ -6,6 +6,7 @@
 #include <stdbool.h>
 #include <malloc.h>
 #include <memory.h>
+#include <math.h>
 
 typedef struct matrix {
     int **values;
@@ -32,7 +33,7 @@ void inputMatrices(matrix ms[], int nMatrices);
 
 void outputMatrix(matrix m);
 
-void outputMatrices(matrix ms[], int nMatrices);
+void outputMatrices(matrix ms[], size_t nMatrices);
 
 void swapRows(matrix *m, int i1, int i2);
 

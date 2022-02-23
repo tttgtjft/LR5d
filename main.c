@@ -1,6 +1,5 @@
 #include <assert.h>
 #include "libs/data_structures/matrix/matrix.h"
-#include <math.h>
 
 #define EXIT_CODE 1
 #define throwExceptionEmptyArray() fprintf(stderr, "empty array"); exit(EXIT_CODE)
@@ -309,12 +308,139 @@ int task11(matrix m){
 
 //------------------------------TASK 12-----------------------------//
 
+position getLeftMin(matrix m){
+    position minIndex = {0, 0};
+    for (int i = 0; i < m.nCols; ++i)
+        for (int j = 0; j < m.nRows; ++j)
+            if (m.values[minIndex.rowIndex][minIndex.colIndex] > m.values[j][i]){
+                minIndex.rowIndex = j;
+                minIndex.colIndex = i;
+            }
 
+    return minIndex;
+}
+
+void swapPenultimateRow(matrix m){
+    position minIndex = getLeftMin(m);
+    int colArr[m.nRows];
+    for (int i = 0; i < m.nRows; ++i)
+        colArr[i] = m.values[i][minIndex.colIndex];
+
+    for (int i = 0; i < m.nCols; ++i)
+        m.values[m.nRows - 2][i] = colArr[i];
+}
+
+void task12(matrix m){
+    swapPenultimateRow(m);
+}
 
 //------------------------------TASK 13-----------------------------//
 
+bool isNonDescendingSorted(const int a[], const size_t n){
+    for (int i = 1; i < n; ++i)
+        if (a[i] < a[i - 1])
+            return true;
+
+    return false;
+}
+
+bool hasAllNonDescendingRows(matrix m){
+    for (int i = 0; i < m.nRows; ++i)
+        if (isNonDescendingSorted(m.values[i], m.nCols))
+            return false;
+
+    return true;
+}
+
+int countNonDescendingRowsMatrices(matrix ms[], int nMatrix){
+    int countNonDescendingRowsMatrices = 0;
+    for (int i = 0; i < nMatrix; ++i)
+        if (hasAllNonDescendingRows(ms[i]))
+            countNonDescendingRowsMatrices++;
+
+    return countNonDescendingRowsMatrices;
+}
+
+int task13(matrix ms[], int nMatrix){
+    return countNonDescendingRowsMatrices(ms, nMatrix);
+}
+
 //------------------------------TASK 14-----------------------------//
 
+bool isZeroArray(const int a[], const size_t n){
+    for (int i = 0; i < n; ++i)
+        if (a[i] != 0)
+            return false;
+
+    return true;
+}
+
+int countZeroRows(matrix m){
+    int countZeroRows = 0;
+    for (int i = 0; i < m.nRows; ++i)
+        if (isZeroArray(m.values[i], m.nCols))
+            countZeroRows++;
+
+    return countZeroRows;
+}
+
+void printMatrixWithMaxZeroRows(matrix *ms, int nMatrix){
+    matrix t[nMatrix];
+    size_t tSize = 0;
+    int maxCountZeroRows = 0;
+    for (int i = 0; i < nMatrix; ++i) {
+        int _countZeroRows = countZeroRows(ms[i]);
+        if (maxCountZeroRows <= _countZeroRows){
+            if (maxCountZeroRows == _countZeroRows){
+                t[tSize++] = ms[i];
+                continue;
+            }
+
+            tSize = 0;
+            t[tSize++] = ms[i];
+            maxCountZeroRows = _countZeroRows;
+        }
+    }
+
+    outputMatrices(t, tSize);
+}
+
+void task14(matrix *ms, int nMatrix){
+    printMatrixWithMaxZeroRows(ms, nMatrix);
+}
+
+//------------------------------TASK 15-----------------------------//
+
+int maxAbsValue(matrix m){
+    position maxPos = getMaxAbsValuePos(m);
+
+    return m.values[maxPos.rowIndex][maxPos.colIndex];
+}
+
+void printMatrixWithLowerStandard(matrix *ms, int nMatrix){
+    matrix t[nMatrix];
+    size_t tSize = 0;
+    int minStandard = INT_MAX;
+    for (int i = 0; i < nMatrix; ++i) {
+        int _maxAbsValue = maxAbsValue(ms[i]);
+        if (minStandard >= _maxAbsValue){
+            if (minStandard == _maxAbsValue){
+                t[tSize++] = ms[i];
+                continue;
+            }
+
+            tSize = 0;
+            t[tSize++] = ms[i];
+            minStandard = _maxAbsValue;
+        }
+    }
+
+    outputMatrices(t, tSize);
+}
+
+void task15(matrix *ms, int nMatrix){
+    printMatrixWithLowerStandard(ms, nMatrix);
+}
 
 //------------------------------TESTS-------------------------------//
 
@@ -358,6 +484,10 @@ void test_task9_oneElement();
 void test_task10_v1();
 void test_task10_v2();
 void test_task11_v1();
+void test_task12_v1();
+void test_task13_v1();
+void test_task14_output();
+void test_task15_output();
 
 void test_matrix_functions();
 
@@ -419,6 +549,10 @@ void test_matrix_tasks(){
     test_task10_v1();
     test_task10_v2();
     test_task11_v1();
+    test_task12_v1();
+    test_task13_v1();
+    test_task14_output();
+    test_task15_output();
 }
 
 void test_matrix_functions(){
@@ -981,6 +1115,94 @@ void test_task11_v1() {
     assert(task11(m) == 2);
 }
 
+void test_task12_v1() {
+    matrix m1 = createMatrixFromArray((int []) {1, 2, 3,
+                                                4, 5, 6,
+                                                7, 8, 1}, 3, 3);
+    matrix m2 = createMatrixFromArray((int []) {1, 2, 3,
+                                                1, 4, 7,
+                                                7, 8, 1}, 3, 3);
+    task12(m1);
+
+    assert(areTwoMatricesEqual(m1, m2));
+
+    freeMemMatrix(&m1);
+    freeMemMatrix(&m2);
+}
+
+void test_task13_v1() {
+    matrix *ms = createArrayOfMatrixFromArray((int[]) {7, 1,
+                                                            1, 1,
+
+                                                            1, 6,
+                                                            2, 2,
+
+                                                            5, 4,
+                                                            2, 3,
+
+                                                            1, 3,
+                                                            7, 9}, 4, 2, 2);
+    assert(task13(ms, 4) == 2);
+
+    freeMemMatrices(ms, 4);
+}
+
+void test_task14_output() {
+    matrix *ms = createArrayOfMatrixFromArray((int[]) {0, 1,
+                                                       1, 0,
+                                                       0, 0,
+
+                                                       1, 1,
+                                                       2, 1,
+                                                       1, 1,
+
+                                                       0, 0,
+                                                       0, 0,
+                                                       4, 7,
+
+                                                       0, 0,
+                                                       0, 1,
+                                                       0, 0,
+
+                                                       0, 1,
+                                                       0, 2,
+                                                       0, 3}, 5, 3, 2);
+
+
+    task14(ms, 5);
+    printf("\n");
+
+    freeMemMatrices(ms, 5);
+}
+
+void test_task15_output() {
+    matrix *ms = createArrayOfMatrixFromArray((int[]) {0, 1,
+                                                       1, 0,
+                                                       0, 0,
+
+                                                       1, 1,
+                                                       2, 1,
+                                                       1, 1,
+
+                                                       0, 0,
+                                                       0, 0,
+                                                       4, 7,
+
+                                                       0, 0,
+                                                       0, 1,
+                                                       0, 0,
+
+                                                       0, 1,
+                                                       0, 2,
+                                                       0, 3}, 5, 3, 2);
+
+
+    task15(ms, 5);
+    printf("\n");
+
+    freeMemMatrices(ms, 5);
+}
+
 //-----------------------TESTS FUNCTIONS---------------------------//
 
 void test_swapRows() {
@@ -1142,4 +1364,3 @@ void test_transposeMatrix_matrixIsColsMoreRows() {
     freeMemMatrix(&m1);
     freeMemMatrix(&m2);
 }
-
